@@ -1,3 +1,4 @@
+import 'package:casist2/core/error/exceptions.dart';
 import 'package:casist2/core/error/failures.dart';
 import 'package:casist2/core/use_cases/use_case.dart';
 import 'package:casist2/data/models/agenda.dart';
@@ -18,8 +19,11 @@ class SearchCompaniesUseCase implements UseCase<List<Company>, SearchCompaniesPa
     try {
       List<Company> companies = await _repository.searchCompanies(params.agenda);
       return Right(companies);
-    } on AuthorizationFailure {
+    } on RequestUnauthorized {
+      // TODO: test
       return Left(AuthorizationFailure());
+    } on RequestFailed {
+      return Left(ServerFailure());
     } catch (_) {
       return Left(ServerFailure());
     }

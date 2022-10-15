@@ -66,7 +66,7 @@ class RoutesNavigator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (_) => locator<ConfBloc>(),
-            child: ConfPage(user: user),
+            child: ConfPage(user),
           ),
         );
 
@@ -75,7 +75,7 @@ class RoutesNavigator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (_) => locator<HomeBloc>(),
-            child: HomePage(user: user),
+            child: HomePage(user),
           ),
         );
 

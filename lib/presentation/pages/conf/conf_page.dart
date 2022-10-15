@@ -12,18 +12,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfPage extends StatefulWidget {
-  final User user;
+  final User _user;
 
-  const ConfPage({
+  const ConfPage(User user, {
     super.key,
-    required this.user
-  });
+  }): _user = user;
 
   @override
   State<ConfPage> createState() => _ConfPageState();
 }
 
 class _ConfPageState extends State<ConfPage> {
+  late List<Company> companies;
+  late List<Agenda> agendas;
+
+  @override
+  void initState() {
+    super.initState();
+    agendas = widget._user.agendas;
+    companies = [];
+  }
 
   void _dispatchScanEvent() {
     BlocProvider.of<ConfBloc>(context).add(
@@ -34,21 +42,21 @@ class _ConfPageState extends State<ConfPage> {
   void _dispatchSaveConfEvent() {
     BlocProvider.of<ConfBloc>(context).add(
       ConfSaveEvent(
-        user: widget.user
+        user: widget._user
       )
     );
   }
 
-  void _dispatchSearchCompaniesEvent (Agenda agenda) {
+  void _dispatchAgendaSelectedEvent (Agenda agenda) {
     BlocProvider.of<ConfBloc>(context).add(
-      ConfSearchCompaniesEvent(
+      ConfAgendaSelectedEvent(
         agenda: agenda
       )
     );
   }
 
   void _onCompanySelected(Company company) {
-    widget.user.company = company;
+    widget._user.company = company;
   }
 
   Widget _scanFloatingButton () {
@@ -65,16 +73,13 @@ class _ConfPageState extends State<ConfPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Agenda> agendas = widget.user.agendas;
-    List<Company> companies = [];
-
     return Scaffold(
       floatingActionButton: _scanFloatingButton(),
       body: BlocConsumer<ConfBloc, ConfState>(
         listener: (BuildContext context, ConfState state) {
           if (state is ConfScannedState) {
           } else if (state is ConfAgendaSelectedState) {
-            widget.user.currentAgenda = state.agenda;
+            widget._user.currentAgenda = state.agenda;
             companies = state.companies;
             Toaster.success(context, state.message);
           } else if (state is ConfFinishedState) {
@@ -97,7 +102,7 @@ class _ConfPageState extends State<ConfPage> {
               companies: companies,
               onCompanySelected: _onCompanySelected,
               dispatchSaveEvent: _dispatchSaveConfEvent,
-              dispatchSearchCompaniesEvent: _dispatchSearchCompaniesEvent,
+              dispatchSearchCompaniesEvent: _dispatchAgendaSelectedEvent,
             );
           }
           return const ErrorStateView();

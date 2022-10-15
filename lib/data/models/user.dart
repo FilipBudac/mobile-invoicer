@@ -41,6 +41,9 @@ class User extends Equatable {
     this.company
   });
 
+  String get accessToken => auth.accessToken;
+  String get refreshToken => auth.refreshToken;
+
   factory User.fromJson(Map<String, dynamic> json) {
     final userData = json["user_data"];
     final authData = {

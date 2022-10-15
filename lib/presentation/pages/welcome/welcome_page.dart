@@ -29,7 +29,6 @@ class _WelcomePageState extends State<WelcomePage> {
           if (state is WelcomeErrorState) {
             Toaster.error(context, state.error);
           } else if (state is WelcomeFinishedState) {
-            // TODO: replace conf with home
             RoutesNavigator.push(Routes.conf, state.user);
           } else if (state is WelcomeUnfinishedState) {
             RoutesNavigator.push(Routes.signin);

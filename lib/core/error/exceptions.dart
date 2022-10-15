@@ -1,6 +1,3 @@
 class RequestUnauthorized implements Exception {}
-class RuntimeError extends Error {
-  String message;
-
-  RuntimeError(this.message);
-}
+class RequestFailed implements Exception {}
+class CacheFailed implements Exception {}

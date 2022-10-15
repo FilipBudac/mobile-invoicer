@@ -11,10 +11,10 @@ abstract class ConfEvent extends Equatable {
 
 class ConfScanEvent extends ConfEvent {}
 
-class ConfSearchCompaniesEvent extends ConfEvent {
+class ConfAgendaSelectedEvent extends ConfEvent {
   final Agenda agenda;
 
-  const ConfSearchCompaniesEvent({
+  const ConfAgendaSelectedEvent({
     required this.agenda
   });
 

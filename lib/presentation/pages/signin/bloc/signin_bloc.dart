@@ -1,3 +1,5 @@
+import 'package:casist2/core/error/failures.dart';
+import 'package:casist2/data/models/user.dart';
 import 'package:casist2/domain/use_cases/user_cache_use_case.dart';
 import 'package:casist2/domain/use_cases/user_signin_use_case.dart';
 import 'package:casist2/presentation/pages/signin/bloc/signin_event.dart';
@@ -24,8 +26,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           )
         );
         return result.fold(
-          (failure) => emit(const SignInErrorState("Nastala chyba pri prihlásení.")),
-          (user) => emit(SignInFinishedState(user: user))
+          (Failure failure) => emit(const SignInErrorState("Nastala chyba pri prihlásení.")),
+          (User user) => emit(SignInFinishedState(user: user))
         );
       },
     );
@@ -33,11 +35,11 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<SignInCacheUserEvent>(
       (event, emit) async {
         final result = await cacheUser.call(
-            CacheUserParams(user: event.user)
+          CacheUserParams(user: event.user)
         );
         return result.fold(
-          (failure) => emit(const SignInErrorState("Nastala chyba pri cachingu.")),
-          (user) => emit(SignInUserCachedState(user: user))
+          (Failure failure) => emit(const SignInErrorState("Nastala chyba pri cachingu.")),
+          (User user) => emit(SignInUserCachedState(user: user))
         );
       },
     );

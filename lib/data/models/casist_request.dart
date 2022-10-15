@@ -15,10 +15,8 @@ class CasistRequest extends Request {
     Object? body,
     Encoding? encoding,
   }) {
-
     final uri = Uri.https(authorityUrl, resourcePath, params);
     final request = CasistRequest(method.asString, uri);
-
     if (headers != null) {
       request.headers.addAll(headers);
     }

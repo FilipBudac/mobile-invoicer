@@ -19,7 +19,7 @@ class AuthRepositoryImpl extends AuthRepository {
       _storage = storage;
 
   @override
-  Future<User?> authenticate(
+  Future<User> authenticate(
     String username,
     String password
   ) async {
@@ -30,7 +30,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<User?> getCachedUser() async {
+  Future<User> getCachedUser() async {
     return _storage.getUser();
   }
 

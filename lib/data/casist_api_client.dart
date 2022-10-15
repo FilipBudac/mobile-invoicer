@@ -88,55 +88,6 @@ class CasistApiClient {
     encoding: encoding,
   );
 
-  Future<String> _getToken() async {
-   final user = await _storage.getUser();
-    if (user == null) {
-      throw RuntimeError("User has to be stored.");
-    }
-    return user.auth.accessToken;
-  }
-
-  Future<void> _refreshToken() async {
-    final user = await _storage.getUser();
-    if (user == null) {
-      throw RuntimeError("User has to be stored.");
-    }
-    final params = {
-      "grant_type": "refresh_token",
-      "refresh_token": user.auth.refreshToken,
-      "old_token": user.auth.accessToken,
-      "client_id": clientId,
-    };
-
-    final Uri uri = Uri.https(authorityUrl, "/api/oauth2/token/", params);
-
-    final headers = {
-      HttpHeaders.acceptHeader: "application/json",
-      HttpHeaders.contentTypeHeader: "application/json",
-    };
-
-    final response = await _client.post(uri, headers: headers);
-
-    user.auth = Auth.fromJson(
-      json.decode(utf8.decode(response.bodyBytes))
-    );
-    await _storage.cacheUser(user);
-  }
-
-  Future<Response> _attemptRequest(CasistRequest request) async {
-    final token = await _getToken();
-
-    request.headers[HttpHeaders.authorizationHeader] = "Bearer $token";
-
-    final response = await Response.fromStream(
-        await _client.send(request)
-    );
-    if (response.statusCode == HttpStatus.forbidden) {
-      throw RequestUnauthorized();
-    }
-    return response;
-  }
-
   Future<Response> _createRequest({
     required HttpMethod method,
     required String resourcePath,
@@ -144,7 +95,7 @@ class CasistApiClient {
     Map<String, dynamic>? params,
     Object? body,
     Encoding? encoding,
-}) async {
+  }) async {
     CasistRequest request = CasistRequest.create(
       resourcePath, method,
       encoding: encoding,
@@ -164,9 +115,50 @@ class CasistApiClient {
         params: params
       );
       return await _attemptRequest(request);
-    } catch (_) {
-      // TODO: runtime error, navigate to sign in page
-      rethrow;
     }
+  }
+
+  Future<Response> _attemptRequest(CasistRequest request) async {
+    final token = await _getToken();
+    request.headers[HttpHeaders.authorizationHeader] = "Bearer $token";
+    final response = await Response.fromStream(
+      await _client.send(request)
+    );
+    if (response.statusCode == HttpStatus.forbidden) {
+      throw RequestUnauthorized();
+    }
+    return response;
+  }
+
+  Future<String> _getToken() async {
+    try {
+      final user = await _storage.getUser();
+      return user.accessToken;
+    } on CacheFailed {
+      throw RequestUnauthorized();
+    }
+  }
+
+  Future<void> _refreshToken() async {
+    final user = await _storage.getUser();
+    final params = {
+      "grant_type": "refresh_token",
+      "refresh_token": user.refreshToken,
+      "old_token": user.accessToken,
+      "client_id": clientId,
+    };
+    final uri = Uri.https(authorityUrl, "/api/oauth2/token/", params);
+    final headers = {
+      HttpHeaders.acceptHeader: "application/json",
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+    final response = await _client.post(uri, headers: headers);
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw RequestUnauthorized();
+    }
+    user.auth = Auth.fromJson(
+      json.decode(utf8.decode(response.bodyBytes))
+    );
+    await _storage.cacheUser(user);
   }
 }

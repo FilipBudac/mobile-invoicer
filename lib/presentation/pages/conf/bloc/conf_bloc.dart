@@ -1,6 +1,7 @@
 import 'package:casist2/core/error/failures.dart';
 import 'package:casist2/core/use_cases/use_case.dart';
 import 'package:casist2/data/models/company.dart';
+import 'package:casist2/data/models/user.dart';
 import 'package:casist2/domain/use_cases/scan_code_use_case.dart';
 import 'package:casist2/domain/use_cases/search_companies_use_case.dart';
 import 'package:casist2/domain/use_cases/user_cache_use_case.dart';
@@ -24,13 +25,17 @@ class ConfBloc extends Bloc<ConfEvent, ConfState> {
 
         final result = await scanCode.call(NoParams());
         return result.fold(
-          (failure) => emit(const ConfErrorState("Nastala chyba pri skenovaní.")),
-          (code) => emit(ConfScannedState(idNumber: code))
+          (Failure failure) => emit(
+            const ConfErrorState("Nastala chyba pri skenovaní.")
+          ),
+          (String code) => emit(
+            ConfScannedState(idNumber: code)
+          )
         );
       },
     );
 
-    on<ConfSearchCompaniesEvent>(
+    on<ConfAgendaSelectedEvent>(
       (event, emit) async {
         emit(ConfProcessingState());
 
@@ -39,7 +44,7 @@ class ConfBloc extends Bloc<ConfEvent, ConfState> {
         );
         return result.fold(
           (Failure failure) => emit(
-              _mapFailureToState(failure)
+            _mapFailureToState(failure)
           ),
           (List<Company> companies) => emit(
             ConfAgendaSelectedState(
@@ -60,8 +65,12 @@ class ConfBloc extends Bloc<ConfEvent, ConfState> {
             CacheUserParams(user: event.user)
         );
         return result.fold(
-          (failure) => emit(const ConfErrorState("Nastala chyba pri uložení.")),
-          (user) => emit(ConfFinishedState(user: user))
+          (Failure failure) => emit(
+            const ConfErrorState("Nastala chyba pri uložení.")
+          ),
+          (User user) => emit(
+            ConfFinishedState(user: user)
+          )
         );
       },
     );

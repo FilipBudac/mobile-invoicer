@@ -2,12 +2,11 @@ import 'package:casist2/data/models/user.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  final User user;
+  final User _user;
 
-  const HomePage({
-    super.key,
-    required this.user
-  });
+  const HomePage(User user, {
+    super.key
+  }): _user = user;
 
   @override
   Widget build(BuildContext context) {
