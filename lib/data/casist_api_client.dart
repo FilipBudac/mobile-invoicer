@@ -130,12 +130,12 @@ class CasistApiClient {
     return response;
   }
 
-  Future<String> _getToken() async {
+  Future<String?> _getToken() async {
     try {
       final user = await _storage.getUser();
       return user.accessToken;
     } on CacheFailed {
-      throw RequestUnauthorized();
+      return null;
     }
   }
 
@@ -144,11 +144,11 @@ class CasistApiClient {
     final params = {
       "grant_type": "refresh_token",
       "refresh_token": user.refreshToken,
-      "old_token": user.accessToken,
       "client_id": clientId,
     };
     final uri = Uri.https(authorityUrl, "/api/oauth2/token/", params);
     final headers = {
+      HttpHeaders.authorizationHeader: "Bearer $user.accessToken",
       HttpHeaders.acceptHeader: "application/json",
       HttpHeaders.contentTypeHeader: "application/json",
     };

@@ -40,6 +40,11 @@ class _WelcomePageState extends State<WelcomePage> {
               inProgress: state.inProgress,
               dispatchAppStart: _dispatchAppStart
             );
+          } else if (state is WelcomeErrorState) {
+            return WelcomeView(
+              inProgress: false,
+              dispatchAppStart: _dispatchAppStart
+            );
           }
           return const ErrorStateView();
         }

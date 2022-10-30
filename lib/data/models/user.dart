@@ -18,6 +18,7 @@ class User extends Equatable {
   final int lastAgendaId;
   UserSettings settings;
   List<Agenda> agendas;
+  List<Map<String, dynamic>> agendasReference;
   Agenda? currentAgenda;
   Company? company;
   Store? store;
@@ -36,6 +37,7 @@ class User extends Equatable {
     required this.settings,
     required this.store,
     required this.agendas,
+    required this.agendasReference,
     required this.auth,
     this.currentAgenda,
     this.company
@@ -51,7 +53,6 @@ class User extends Equatable {
       "refresh_token": json["refresh_token"],
       "scope": json["scope"],
     };
-
     return User(
         id: userData["id"],
         username: userData["username"],
@@ -65,6 +66,7 @@ class User extends Equatable {
         settings: UserSettings.fromJson(json["settings"]),
         store: Store.fromJson(json["prevadzka"]),
         agendas: List<Agenda>.from(json["agendy"].map((agenda) => Agenda.fromJson(agenda))),
+        agendasReference: List<Map<String, dynamic>>.from(userData["agenda"]),
         currentAgenda: json["currentAgenda"] != null ? Agenda.fromJson(json["currentAgenda"]) : null,
         company: json["company"] != null ? Company.fromJson(json["company"]) : null,
         auth: Auth.fromJson(authData)
@@ -86,6 +88,7 @@ class User extends Equatable {
         "activated": activated,
         "lastAgenda": lastAgendaId,
         "lastObdobie": lastObdobie,
+        "agenda": agendasReference
       },
       "prevadzka": store?.toJson(),
       "settings": settings.toJson(),

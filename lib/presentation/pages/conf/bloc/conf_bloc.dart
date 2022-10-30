@@ -62,7 +62,7 @@ class ConfBloc extends Bloc<ConfEvent, ConfState> {
         emit(ConfProcessingState());
 
         final result = await cacheUserUseCase.call(
-            CacheUserParams(user: event.user)
+          CacheUserParams(user: event.user)
         );
         return result.fold(
           (Failure failure) => emit(

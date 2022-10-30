@@ -18,7 +18,7 @@ class StartAppUseCase implements UseCase<User, NoParams> {
       User cachedUser = await _repository.getCachedUser();
       return Right(cachedUser);
     } on CacheFailed {
-      return Left(ServerFailure());
+      return Left(UserFailure());
     } catch (_) {
       return Left(ServerFailure());
     }
