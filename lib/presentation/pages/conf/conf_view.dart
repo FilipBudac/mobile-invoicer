@@ -1,5 +1,5 @@
-import 'package:casist2/data/models/agenda.dart';
-import 'package:casist2/data/models/company.dart';
+import 'package:casist2/domain/entities/agenda.dart';
+import 'package:casist2/domain/entities/company.dart';
 import 'package:casist2/presentation/widgets/autocomplete_input_field.dart';
 import 'package:casist2/presentation/widgets/headings.dart';
 import 'package:casist2/presentation/widgets/loading_button.dart';

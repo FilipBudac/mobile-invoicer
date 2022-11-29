@@ -1,23 +1,24 @@
+import 'package:casist2/domain/entities/company.dart';
 import 'package:equatable/equatable.dart';
 
-class Company extends Equatable {
+class CompanyCasist extends Equatable {
   final int id;
-  final String company; // firma
+  final String company;
   final String ico;
   final String dic;
   final String icdph;
-  final String street; // ulica
-  final String streetNumber; // cislo
-  final String city; // mesto
+  final String street;
+  final String streetNumber;
+  final String city;
   final String psc;
   final String email;
-  final String poznamka;
-  final int agendaId; // agenda_id
-  final bool voCena; // vo_cena
-  final String clientId; // id_number
-  final String mobil;
+  final bool voCena;
+  String? poznamka;
+  int? agendaId;
+  String? clientId; // id_number
+  String? mobil;
 
-  const Company({
+  CompanyCasist({
     required this.id,
     required this.company,
     required this.ico,
@@ -28,14 +29,28 @@ class Company extends Equatable {
     required this.city,
     required this.psc,
     required this.email,
-    required this.poznamka,
-    required this.agendaId,
     required this.voCena,
-    required this.clientId,
-    required this.mobil,
+    this.poznamka,
+    this.agendaId,
+    this.clientId,
+    this.mobil,
   });
 
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
+  factory CompanyCasist.fromDomain(Company company) => CompanyCasist(
+    id: company.id,
+    company: company.company,
+    ico: company.ico,
+    dic: company.dic,
+    icdph: company.icdph,
+    city: company.city,
+    street: company.street,
+    streetNumber: company.streetNumber,
+    psc: company.psc,
+    email: company.email,
+    voCena: company.voCena,
+  );
+
+  factory CompanyCasist.fromJson(Map<String, dynamic> json) => CompanyCasist(
     id: json["id"],
     company: json["firma"],
     ico: json["ico"],
@@ -70,10 +85,23 @@ class Company extends Equatable {
   };
 
   @override
-  String toString() {
-    return 'Company{id: $id, company: $company, ico: $ico, dic: $dic, icdph: $icdph, street: $street, streetNumber: $streetNumber, city: $city, psc: $psc, email: $email, poznamka: $poznamka, agendaId: $agendaId, voCena: $voCena, clientId: $clientId, mobil: $mobil}';
-  }
-
-  @override
   List<Object?> get props => [id, company, ico, dic, icdph, street, streetNumber, psc, email];
+}
+
+extension CompanyX on CompanyCasist {
+  Company toDomain() {
+    return Company(
+      id: id,
+      company: company,
+      ico: ico,
+      dic: dic,
+      icdph: icdph,
+      city: city,
+      street: street,
+      streetNumber: streetNumber,
+      psc: psc,
+      email: email,
+      voCena: voCena,
+    );
+  }
 }

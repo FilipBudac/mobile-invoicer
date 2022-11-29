@@ -1,7 +1,8 @@
 import 'package:casist2/core/error/failures.dart';
-import 'package:casist2/core/use_cases/use_case.dart';
+import 'package:casist2/core/use_case.dart';
 import 'package:casist2/data/models/company.dart';
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/company.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:casist2/domain/use_cases/scan_code_use_case.dart';
 import 'package:casist2/domain/use_cases/search_companies_use_case.dart';
 import 'package:casist2/domain/use_cases/user_cache_use_case.dart';

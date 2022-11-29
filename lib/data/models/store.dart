@@ -1,4 +1,7 @@
-class Store {
+
+import 'package:casist2/domain/entities/store.dart';
+
+class StoreCasist {
   final int id;
   final String prevadzka;
   final String ulica;
@@ -6,12 +9,11 @@ class Store {
   final String mesto;
   final String psc;
   final String kod;
-  final String tel;
-  final String email;
-  final String web;
-  final String recordCreated;
+  String? tel;
+  String? email;
+  String? web;
 
-  Store({
+  StoreCasist({
     required this.id,
     required this.prevadzka,
     required this.ulica,
@@ -19,13 +21,22 @@ class Store {
     required this.mesto,
     required this.psc,
     required this.kod,
-    required this.tel,
-    required this.email,
-    required this.web,
-    required this.recordCreated
+    this.tel,
+    this.email,
+    this.web,
   });
 
-  factory Store.fromJson(Map<String, dynamic> json) => Store(
+  factory StoreCasist.fromDomain(Store store) => StoreCasist(
+    id: store.id,
+    prevadzka: store.prevadzka,
+    ulica: store.ulica,
+    cislo: store.cislo,
+    mesto: store.mesto,
+    psc: store.psc,
+    kod: store.kod
+  );
+
+  factory StoreCasist.fromJson(Map<String, dynamic> json) => StoreCasist(
     id: json["id"],
     prevadzka: json["prevadzka"],
     ulica: json["ulica"],
@@ -36,7 +47,6 @@ class Store {
     tel: json["tel"],
     email: json["email"],
     web: json["web"],
-    recordCreated: json["record_created"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -50,11 +60,19 @@ class Store {
     "tel": tel,
     "email": email,
     "web": web,
-    "record_created": recordCreated,
   };
+}
 
-  @override
-  String toString() {
-    return 'Store{id: $id, prevadzka: $prevadzka, ulica: $ulica, cislo: $cislo, mesto: $mesto, psc: $psc, kod: $kod, tel: $tel, email: $email, web: $web, record_created: $recordCreated}';
+extension StoreX on StoreCasist {
+  Store toDomain() {
+    return Store(
+      id: id,
+      prevadzka: prevadzka,
+      ulica: ulica,
+      cislo: cislo,
+      mesto: mesto,
+      psc: psc,
+      kod: kod
+    );
   }
 }

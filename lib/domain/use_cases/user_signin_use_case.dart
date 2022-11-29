@@ -1,8 +1,9 @@
 import 'package:casist2/core/error/exceptions.dart';
 import 'package:casist2/core/error/failures.dart';
-import 'package:casist2/core/use_cases/use_case.dart';
+import 'package:casist2/core/use_case.dart';
 import 'package:casist2/data/models/user.dart';
 import 'package:casist2/domain/abstraction/auth_repository.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -17,7 +18,7 @@ class SignInUserUseCase implements UseCase<User, SignInParams> {
   Future<Either<Failure, User>> call(SignInParams params) async {
     try {
       // TODO: use named params for constructor?
-      User user = await _repository.authenticate(params.username, params.password);
+      final user = await _repository.authenticate(params.username, params.password);
       return Right(user);
     } on RequestFailed {
       return Left(ServerFailure());

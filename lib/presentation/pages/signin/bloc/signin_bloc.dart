@@ -1,5 +1,6 @@
 import 'package:casist2/core/error/failures.dart';
 import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:casist2/domain/use_cases/user_cache_use_case.dart';
 import 'package:casist2/domain/use_cases/user_signin_use_case.dart';
 import 'package:casist2/presentation/pages/signin/bloc/signin_event.dart';

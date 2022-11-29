@@ -56,7 +56,7 @@ void main() {
         )
       );
       expect(result, equals(
-        User.fromJson(
+        UserCasist.fromJson(
           json.decode(user)
         )
       ));

@@ -1,4 +1,4 @@
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:casist2/core/error/failures.dart';
-import 'package:casist2/core/use_cases/use_case.dart';
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/core/use_case.dart';
 import 'package:casist2/domain/abstraction/auth_repository.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 

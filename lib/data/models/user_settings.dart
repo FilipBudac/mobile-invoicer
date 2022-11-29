@@ -1,4 +1,6 @@
-class UserSettings {
+import 'package:casist2/domain/entities/user_settings.dart';
+
+class UserSettingsCasist {
   final int id;
   final int sd1;
   final int sd2;
@@ -6,7 +8,7 @@ class UserSettings {
   final String menaShort;
   final String textFa;
 
-  UserSettings({
+  UserSettingsCasist({
     required this.id,
     required this.sd1,
     required this.sd2,
@@ -15,7 +17,16 @@ class UserSettings {
     required this.textFa
   });
 
-  factory UserSettings.fromJson(Map<String, dynamic> json) => UserSettings(
+  factory UserSettingsCasist.fromDomain(UserSettings settings) => UserSettingsCasist(
+      id: settings.id,
+      sd1: settings.sd1,
+      sd2: settings.sd2,
+      mena: settings.mena,
+      menaShort: settings.menaShort,
+      textFa: settings.textFa
+  );
+
+  factory UserSettingsCasist.fromJson(Map<String, dynamic> json) => UserSettingsCasist(
     id: json["id"],
     sd1: json["sd1"],
     sd2: json["sd2"],
@@ -32,10 +43,18 @@ class UserSettings {
     "mena_short": menaShort,
     "text_fa": textFa,
   };
+}
 
-  @override
-  String toString() {
-    return 'UserSettings{id: $id, sd1: $sd1, sd2: $sd2, mena: $mena, menaShort: $menaShort, textFa: $textFa}';
+extension UserSettingX on UserSettingsCasist {
+  UserSettings toDomain() {
+    return UserSettings(
+        id: id,
+        sd1: sd1,
+        sd2: sd2,
+        mena: mena,
+        menaShort: menaShort,
+        textFa: textFa
+    );
   }
 }
 

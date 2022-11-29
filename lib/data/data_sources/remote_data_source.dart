@@ -10,8 +10,8 @@ import '../casist_api_client.dart';
 
 abstract class RemoteDataSource {
 
-  Future<User> authenticate({required String username, required String password});
-  Future<List<Company>> searchCompanies({required Agenda agenda});
+  Future<UserCasist> authenticate({required String username, required String password});
+  Future<List<CompanyCasist>> searchCompanies({required AgendaCasist agenda});
 
 }
 
@@ -23,7 +23,7 @@ class Casist2Api implements RemoteDataSource {
   }): _client = client;
 
   @override
-  Future<User> authenticate({
+  Future<UserCasist> authenticate({
     required String username,
     required String password
   }) async {
@@ -41,31 +41,29 @@ class Casist2Api implements RemoteDataSource {
     if (HttpStatus.ok != response.statusCode) {
       throw RequestFailed();
     }
-    return User.fromJson(
+    return UserCasist.fromJson(
       json.decode(utf8.decode(response.bodyBytes))
     );
   }
 
   @override
-  Future<List<Company>> searchCompanies({
-    required Agenda agenda,
+  Future<List<CompanyCasist>> searchCompanies({
+    required AgendaCasist agenda,
   }) async {
-    final params = {
-      "agenda": agenda.id.toString()
-    };
     final headers = {
       HttpHeaders.acceptHeader: "application/json",
-      HttpHeaders.contentTypeHeader: "application/json"
+      HttpHeaders.contentTypeHeader: "application/json",
+      "X-Agenda": agenda.id.toString(),
     };
-    final response = await _client.get("/api/firmy", params: params, headers: headers);
+    final response = await _client.get("/api/firmy", headers: headers);
     if (HttpStatus.ok != response.statusCode) {
       throw RequestFailed();
     }
     final decodedResponse = json.decode(
       utf8.decode(response.bodyBytes)
     );
-    return List<Company>.from(decodedResponse["results"].map(
-      (company) => Company.fromJson(company))
+    return List<CompanyCasist>.from(decodedResponse["results"].map(
+      (company) => CompanyCasist.fromJson(company))
     );
   }
 }

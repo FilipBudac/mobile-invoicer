@@ -156,7 +156,7 @@ class CasistApiClient {
     if (response.statusCode == HttpStatus.unauthorized) {
       throw RequestUnauthorized();
     }
-    user.auth = Auth.fromJson(
+    user.auth = AuthCasist.fromJson(
       json.decode(utf8.decode(response.bodyBytes))
     );
     await _storage.cacheUser(user);

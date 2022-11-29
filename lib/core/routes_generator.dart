@@ -1,5 +1,5 @@
 import 'package:casist2/core/boostrap.dart';
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:casist2/presentation/pages/conf/bloc/conf_bloc.dart';
 import 'package:casist2/presentation/pages/conf/conf_page.dart';
 import 'package:casist2/presentation/pages/home/bloc/home_bloc.dart';

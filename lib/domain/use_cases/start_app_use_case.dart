@@ -1,8 +1,8 @@
 import 'package:casist2/core/error/exceptions.dart';
 import 'package:casist2/core/error/failures.dart';
-import 'package:casist2/core/use_cases/use_case.dart';
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/core/use_case.dart';
 import 'package:casist2/domain/abstraction/auth_repository.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 
 class StartAppUseCase implements UseCase<User, NoParams> {
@@ -15,7 +15,7 @@ class StartAppUseCase implements UseCase<User, NoParams> {
   @override
   Future<Either<Failure, User>> call(NoParams params) async {
     try {
-      User cachedUser = await _repository.getCachedUser();
+      final cachedUser = await _repository.getCachedUser();
       return Right(cachedUser);
     } on CacheFailed {
       return Left(UserFailure());

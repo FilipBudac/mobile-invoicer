@@ -48,5 +48,4 @@ TODO:
 2. Translations https://github.com/appditto/natrium_wallet_flutter/tree/master/lib/l10n
 3. Refactoring / Search for inconsistencies
 4. Tests
-5. Group use case to files such as conf_use_cases, auth_use_cases, home_use_cases
-6. Use themes and remove duplicated styles in the presentation layer
+5. Use themes and remove duplicated styles in the presentation layer

@@ -5,8 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class Storage {
 
-  Future<User> getUser();
-  Future<void> cacheUser(User user);
+  Future<UserCasist> getUser();
+  Future<void> cacheUser(UserCasist user);
 
 }
 
@@ -18,19 +18,19 @@ class SecureStorage extends Storage {
   }) : _storage = storage;
 
   @override
-  Future<User> getUser() async {
+  Future<UserCasist> getUser() async {
     String? cachedUser = await _storage.read(key: "user");
     if (cachedUser == null) {
       throw CacheFailed();
     }
-    final user = User.fromJson(
+    final user = UserCasist.fromJson(
       jsonDecode(cachedUser)
     );
     return user;
   }
 
   @override
-  Future<void> cacheUser(User user) async {
+  Future<void> cacheUser(UserCasist user) async {
     await _storage.write(key: "user", value: jsonEncode(user.toJson()));
   }
 }

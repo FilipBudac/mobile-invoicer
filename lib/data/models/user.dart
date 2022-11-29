@@ -2,43 +2,44 @@ import 'package:casist2/data/models/agenda.dart';
 import 'package:casist2/data/models/auth.dart';
 import 'package:casist2/data/models/company.dart';
 import 'package:casist2/data/models/store.dart';
+import 'package:casist2/domain/entities/agenda.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:equatable/equatable.dart';
-
 import 'user_settings.dart';
 
-class User extends Equatable {
+class UserCasist extends Equatable {
   final int id;
-  final bool isSuperuser;
   final String username;
   final String firstName;
   final String lastName;
-  final bool isActive;
-  final int lastObdobie;
-  final bool activated;
-  final int lastAgendaId;
-  UserSettings settings;
-  List<Agenda> agendas;
+  bool? isSuperuser;
+  bool? isActive;
+  int? lastObdobie;
+  bool? activated;
+  int? lastAgendaId;
+  UserSettingsCasist settings;
+  List<AgendaCasist> agendas;
   List<Map<String, dynamic>> agendasReference;
-  Agenda? currentAgenda;
-  Company? company;
-  Store? store;
-  Auth auth;
+  AgendaCasist? currentAgenda;
+  CompanyCasist? company;
+  StoreCasist? store;
+  AuthCasist auth;
 
-  User({
+  UserCasist({
     required this.id,
-    required this.isSuperuser,
+    this.isSuperuser,
     required this.username,
     required this.firstName,
     required this.lastName,
-    required this.isActive,
-    required this.lastObdobie,
-    required this.activated,
-    required this.lastAgendaId,
+    required this.agendasReference,
     required this.settings,
     required this.store,
     required this.agendas,
-    required this.agendasReference,
     required this.auth,
+    this.isActive,
+    this.lastObdobie,
+    this.activated,
+    this.lastAgendaId,
     this.currentAgenda,
     this.company
   });
@@ -46,14 +47,30 @@ class User extends Equatable {
   String get accessToken => auth.accessToken;
   String get refreshToken => auth.refreshToken;
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory UserCasist.fromDomain(User user) {
+    return UserCasist(
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      agendasReference: user.agendasReference,
+      auth: AuthCasist.fromDomain(user.auth),
+      currentAgenda: user.currentAgenda != null ? AgendaCasist.fromDomain(user.currentAgenda!): null,
+      store: StoreCasist.fromDomain(user.store!),
+      settings: UserSettingsCasist.fromDomain(user.settings),
+      company: user.company != null ? CompanyCasist.fromDomain(user.company!) : null,
+      agendas: List<AgendaCasist>.from(user.agendas.map((agenda) => AgendaCasist.fromDomain(agenda))),
+    );
+  }
+
+  factory UserCasist.fromJson(Map<String, dynamic> json) {
     final userData = json["user_data"];
     final authData = {
       "access_token": json["access_token"],
       "refresh_token": json["refresh_token"],
       "scope": json["scope"],
     };
-    return User(
+    return UserCasist(
         id: userData["id"],
         username: userData["username"],
         firstName: userData["first_name"],
@@ -63,13 +80,13 @@ class User extends Equatable {
         activated: userData["activated"],
         lastAgendaId: userData["lastAgenda"],
         lastObdobie: userData["lastObdobie"],
-        settings: UserSettings.fromJson(json["settings"]),
-        store: Store.fromJson(json["prevadzka"]),
-        agendas: List<Agenda>.from(json["agendy"].map((agenda) => Agenda.fromJson(agenda))),
+        settings: UserSettingsCasist.fromJson(json["settings"]),
+        store: StoreCasist.fromJson(json["prevadzka"]),
+        agendas: List<AgendaCasist>.from(json["agendy"].map((agenda) => AgendaCasist.fromJson(agenda))),
         agendasReference: List<Map<String, dynamic>>.from(userData["agenda"]),
-        currentAgenda: json["currentAgenda"] != null ? Agenda.fromJson(json["currentAgenda"]) : null,
-        company: json["company"] != null ? Company.fromJson(json["company"]) : null,
-        auth: Auth.fromJson(authData)
+        currentAgenda: json["currentAgenda"] != null ? AgendaCasist.fromJson(json["currentAgenda"]) : null,
+        company: json["company"] != null ? CompanyCasist.fromJson(json["company"]) : null,
+        auth: AuthCasist.fromJson(authData)
     );
   }
 
@@ -100,10 +117,26 @@ class User extends Equatable {
   }
 
   @override
-  String toString() {
-    return 'User{id: $id, isSuperuser: $isSuperuser, username: $username, firstName: $firstName, lastName: $lastName, isActive: $isActive, lastObdobie: $lastObdobie, activated: $activated, lastAgendaId: $lastAgendaId, userSettings: $settings, agendas: $agendas}';
-  }
-
-  @override
   List<Object?> get props => [id, username, firstName, lastName, isSuperuser, isActive, activated, lastAgendaId, lastObdobie];
+}
+
+extension UserX on UserCasist {
+  User toDomain() {
+    return User(
+      id: id,
+      auth: auth.toDomain(),
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+      agendasReference: agendasReference,
+      currentAgenda: currentAgenda?.toDomain(),
+      store: store?.toDomain(),
+      settings: settings.toDomain(),
+      company: company?.toDomain(),
+      agendas: List<Agenda>.from(agendas.map((agenda) => agenda.toDomain())),
+    );
+  }
+  String get fullName {
+    return firstName + lastName;
+  }
 }

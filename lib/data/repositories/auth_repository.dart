@@ -3,6 +3,7 @@ import 'package:casist2/data/data_sources/remote_data_source.dart';
 import 'package:casist2/data/storage/secure_storage.dart';
 import 'package:casist2/data/models/user.dart';
 import 'package:casist2/domain/abstraction/auth_repository.dart';
+import 'package:casist2/domain/entities/user.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
 
@@ -23,19 +24,23 @@ class AuthRepositoryImpl extends AuthRepository {
     String username,
     String password
   ) async {
-    return _remoteDataSource.authenticate(
+    final user = await _remoteDataSource.authenticate(
       username: username,
       password: password
     );
+    return user.toDomain();
   }
 
   @override
   Future<User> getCachedUser() async {
-    return _storage.getUser();
+    final user = await _storage.getUser();
+    return user.toDomain();
   }
 
   @override
   Future<void> cacheUser(User user) async {
-    _storage.cacheUser(user);
+    _storage.cacheUser(
+        UserCasist.fromDomain(user)
+    );
   }
 }

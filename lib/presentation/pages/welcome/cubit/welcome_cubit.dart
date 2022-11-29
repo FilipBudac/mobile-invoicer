@@ -1,6 +1,7 @@
 import 'package:casist2/core/error/failures.dart';
-import 'package:casist2/core/use_cases/use_case.dart';
+import 'package:casist2/core/use_case.dart';
 import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:casist2/domain/use_cases/start_app_use_case.dart';
 import 'package:casist2/presentation/pages/welcome/cubit/welcome_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

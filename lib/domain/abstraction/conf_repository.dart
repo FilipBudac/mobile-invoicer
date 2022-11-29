@@ -1,5 +1,5 @@
-import 'package:casist2/data/models/agenda.dart';
-import 'package:casist2/data/models/company.dart';
+import 'package:casist2/domain/entities/agenda.dart';
+import 'package:casist2/domain/entities/company.dart';
 
 abstract class ConfRepository {
 

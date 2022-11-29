@@ -1,6 +1,7 @@
+import 'package:casist2/domain/entities/agenda.dart';
 import 'package:equatable/equatable.dart';
 
-class Agenda extends Equatable {
+class AgendaCasist extends Equatable {
   final int id;
   final String firma;
   final String ico;
@@ -10,12 +11,11 @@ class Agenda extends Equatable {
   final String mesto;
   final String psc;
   final String email;
-  final bool jednoducheUcto;
-  final bool svb;
-  final bool active;
-  final int client;
+  bool? jednoducheUcto;
+  bool? active;
+  int? client;
 
-  const Agenda({
+  AgendaCasist({
     required this.id,
     required this.firma,
     required this.ico,
@@ -25,13 +25,24 @@ class Agenda extends Equatable {
     required this.mesto,
     required this.psc,
     required this.email,
-    required this.jednoducheUcto,
-    required this.svb,
-    required this.active,
-    required this.client
+    this.jednoducheUcto,
+    this.active,
+    this.client
   });
 
-  factory Agenda.fromJson(Map<String, dynamic> json) => Agenda(
+  factory AgendaCasist.fromDomain(Agenda agenda) => AgendaCasist(
+    id: agenda.id,
+    firma: agenda.firma,
+    ico: agenda.ico,
+    dic: agenda.dic,
+    ulica: agenda.ulica,
+    cislo: agenda.cislo,
+    mesto: agenda.mesto,
+    psc: agenda.psc,
+    email: agenda.email
+  );
+
+  factory AgendaCasist.fromJson(Map<String, dynamic> json) => AgendaCasist(
     id: json["id"],
     client: json['client'],
     firma: json["firma"],
@@ -44,7 +55,6 @@ class Agenda extends Equatable {
     email: json["email"],
     jednoducheUcto: json["jednoduche_ucto"],
     active: json["active"],
-    svb: json["svb"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -60,14 +70,24 @@ class Agenda extends Equatable {
     "email": email,
     "jednoduche_ucto": jednoducheUcto,
     "active": active,
-    "svb": svb,
   };
 
   @override
-  String toString() {
-    return 'Agenda{id: $id, firma: $firma, ico: $ico, dic: $dic, ulica: $ulica, cislo: $cislo, mesto: $mesto, psc: $psc, email: $email, jednoducheUcto: $jednoducheUcto, svb: $svb, active: $active, client: $client}';
-  }
-
-  @override
   List<Object?> get props => [id, client, firma, ico, dic, ulica, cislo, mesto, psc, email];
+}
+
+extension AgendaX on AgendaCasist {
+  Agenda toDomain() {
+    return Agenda(
+      id: id,
+      firma: firma,
+      ico: ico,
+      dic: dic,
+      ulica: ulica,
+      cislo: cislo,
+      mesto: mesto,
+      psc: psc,
+      email: email
+    );
+  }
 }

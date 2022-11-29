@@ -1,4 +1,4 @@
-import 'package:casist2/data/models/user.dart';
+import 'package:casist2/domain/entities/user.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SignInEvent extends Equatable {
